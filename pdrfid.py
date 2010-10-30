@@ -34,7 +34,35 @@ except:
 
 lastuid = None
 
-print 'Card number: %s\n' % card.readernum
+print 'Reader number: %s\n' % card.readernum
+
+class PureData:
+
+  def __init__(self, host):
+    self.host = host
+    self.port = 12346
+    self.sock = None
+
+  def connect(self):
+    self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    self.sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+    self.sock.connect((self.host, self.port))
+
+  def newcard(self, readernum, uid):
+    print 'Sending new card message for %s' % uid
+    try:
+      if self.sock is None:
+        self.connect()
+
+      self.sock.send('Card %s %s;' % (readernum, uid))
+
+    except Exception, e:
+      print 'Error %s sending message' % repr(e)
+      self.sock.close()
+      self.sock = None
+
+
+pd = PureData('lovelace')
 
 while True:
     
@@ -47,12 +75,10 @@ while True:
         lastuid = card.uid
 
         print 'ID: %s\n' % card.uid
-
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.connect(('lovelace', 12346))
-        s.send('Card %s %s;' % (card.readernum, card.uid))
-        s.close()
+        pd.newcard(card.readernum, card.uid)
 
     time.sleep(0.5)
 
 os._exit(True)
+
+
