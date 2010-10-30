@@ -82,8 +82,8 @@ class rfidiot:
 					print 'Could not find PCSC daemon, try with option -n if you don\'t have a reader'
 					os._exit(True)
 				try:
-					self.readername= self.pcsc[readernum].name
-					self.pcsc_connection= self.pcsc[readernum].createConnection()
+					self.readername= self.pcsc[self.readernum].name
+					self.pcsc_connection= self.pcsc[self.readernum].createConnection()
 					# debug option will show APDU traffic
 					if DEBUG:
 						from smartcard.CardConnectionObserver import ConsoleCardConnectionObserver
@@ -117,7 +117,7 @@ class rfidiot:
 					if hresult != 0:
 						raise error, 'Failed to establish context: ' + smartcard.scard.SCardGetErrorMessage(hresult)
 					hresult, readers = smartcard.scard.SCardListReaders( hcontext, [] )
-					readerstates= [ (readers[readernum], smartcard.scard.SCARD_STATE_UNAWARE ) ]
+					readerstates= [ (readers[self.readernum], smartcard.scard.SCARD_STATE_UNAWARE ) ]
 					hresult, newstates = smartcard.scard.SCardGetStatusChange( hcontext, 0, readerstates )
 					self.pcsc_atr= self.ListToHex(newstates[0][2])
 					pass
