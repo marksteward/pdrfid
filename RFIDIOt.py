@@ -99,7 +99,8 @@ class rfidiot:
 					if string.find(self.readername,'SDI010') == 0:
 						self.readersubtype= self.READER_SCM
 					else:
-						if string.find(self.readername,'ACS ACR 38U') == 0:
+						if string.find(self.readername,'ACS ACR 38U') == 0 \
+                            or string.find(self.readername,'ACS ACR122U PICC') == 0:
 						#if string.find(self.readername,'ACS ACR') == 0:
 							self.readersubtype= self.READER_ACS
 							self.pcsc_protocol= smartcard.scard.SCARD_PROTOCOL_T0
@@ -874,7 +875,7 @@ class rfidiot:
 			except smartcard.Exceptions.NoCardException:
 				self.errorcode= self.PCSC_NO_CARD
 				return False
-			except:
+			except Exception, e:
 				self.errorcode= self.PCSC_COMMS_ERROR
 				return False
 			if self.errorcode == self.ISO_OK:

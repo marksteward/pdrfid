@@ -37,7 +37,8 @@ lastuid = None
 print 'Card number: %s\n' % card.readernum
 
 while True:
-
+    
+    #print 'Protocol: %s, %s\n' % (card.pcsc_protocol, card.pcsc_connection.getProtocol())
     card.select()
     if card.uid:
 
