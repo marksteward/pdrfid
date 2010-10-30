@@ -1,5 +1,6 @@
 
     sudo apt-get install pcscd libpcsclite1 python-pyscard
-    sudo ./pdrfid.py -L
-    sudo ./pdrfid.py -r0
+    sudo service pcscd start
+    ./pdrfid.py -L
+    ./pdrfid.py -r0
 
